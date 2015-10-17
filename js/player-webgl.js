@@ -157,7 +157,7 @@ var vrHMD, vrSensor;
       webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, texture);
       webGL.gl.uniform1i(shader.uniforms['uSampler'], 0);
 
-      webGL.gl.uniform1f(shader.uniforms['eye'], eye & 1);
+      webGL.gl.uniform1f(shader.uniforms['eye'], eye ? 1 : 0);
       webGL.gl.uniform1f(shader.uniforms['projection'], projection);
 
       var rotation = mat4.create();
