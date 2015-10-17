@@ -137,8 +137,8 @@ function initFromSettings(newSettings) {
   }
 
   var settings = util.getTruthyURLSearchParams(newSettings, {
-    autoplay: undefined,
-    controls: true,
+    autoplay: true, //undefined,
+    controls: false, //true,
     loop: true,
     sound: true,
     projection: 'mono'
