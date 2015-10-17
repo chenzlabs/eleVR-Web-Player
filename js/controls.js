@@ -12,6 +12,10 @@ var manualRotation = quat.create(),
 
   var controls = {
     manualControls: {
+      '%' : {index: 1, sign: 1, active: 0},
+      '\'' : {index: 1, sign: -1, active: 0},
+      '&' : {index: 0, sign: 1, active: 0},
+      '(' : {index: 0, sign: -1, active: 0},
       'a' : {index: 1, sign: 1, active: 0},
       'd' : {index: 1, sign: -1, active: 0},
       'w' : {index: 0, sign: 1, active: 0},
