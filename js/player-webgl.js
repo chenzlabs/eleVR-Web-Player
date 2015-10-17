@@ -190,7 +190,7 @@ var vrHMD, vrSensor;
 
       if (eye === 2) { // only one eye at all!
         webGL.gl.viewport(0, 0, canvas.width, canvas.height);
-      } else { // right eye
+      } else 
       if (eye === 0) { // left eye
         webGL.gl.viewport(0, 0, canvas.width/2, canvas.height);
       } else { // right eye
