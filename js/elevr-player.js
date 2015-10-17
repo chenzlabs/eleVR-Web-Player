@@ -171,10 +171,6 @@ function initFromSettings(newSettings) {
     }
   }
 
-  if (settings.manualRotation) {
-    window.manualRotation = settings.manualRotation;
-  }
-
   controls.setLooping(settings.loop);
 
   if (settings.video) {
@@ -206,6 +202,10 @@ function initFromSettings(newSettings) {
     }
 
     controls.loadVideo(settings.video);
+  }
+
+  if (settings.manualRotation) {
+    window.manualRotation = settings.manualRotation;
   }
 
   if (settings.autoplay) {
