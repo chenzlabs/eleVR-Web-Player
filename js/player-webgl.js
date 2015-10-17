@@ -157,7 +157,7 @@ var vrHMD, vrSensor;
       webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, texture);
       webGL.gl.uniform1i(shader.uniforms['uSampler'], 0);
 
-      webGL.gl.uniform1f(shader.uniforms['eye'], eye);
+      webGL.gl.uniform1f(shader.uniforms['eye'], eye & 1);
       webGL.gl.uniform1f(shader.uniforms['projection'], projection);
 
       var rotation = mat4.create();
@@ -188,6 +188,9 @@ var vrHMD, vrSensor;
 
       webGL.gl.uniformMatrix4fv(shader.uniforms['proj_inv'], false, inv);
 
+      if (eye === 2) { // only one eye at all!
+        webGL.gl.viewport(0, 0, canvas.width, canvas.height);
+      } else { // right eye
       if (eye === 0) { // left eye
         webGL.gl.viewport(0, 0, canvas.width/2, canvas.height);
       } else { // right eye
@@ -237,10 +240,15 @@ var vrHMD, vrSensor;
         perspectiveMatrix = util.mat4PerspectiveFromVRFieldOfView(rightParams.recommendedFieldOfView, 0.1, 10);
         webGL.drawOneEye(1, perspectiveMatrix);
       } else {
+/*
         var ratio = (canvas.width/2)/canvas.height;
         mat4.perspective(perspectiveMatrix, Math.PI/2, ratio, 0.1, 10);
         webGL.drawOneEye(0, perspectiveMatrix);
         webGL.drawOneEye(1, perspectiveMatrix);
+*/
+        var ratio = canvas.width/canvas.height;
+        mat4.perspective(perspectiveMatrix, Math.PI/2, ratio, 0.1, 10);
+        webGL.drawOneEye(2, perspectiveMatrix);
       }
 
 
