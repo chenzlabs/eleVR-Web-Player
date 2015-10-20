@@ -53,8 +53,8 @@ var vrHMD, vrSensor;
     initTextures: function() {
       texture = webGL.gl.createTexture();
       webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, texture);
-      webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_MAG_FILTER, webGL.gl.NEAREST); //LINEAR);
-      webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_MIN_FILTER, webGL.gl.NEAREST); //LINEAR);
+      webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_MAG_FILTER, webGL.gl.LINEAR);
+      webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_MIN_FILTER, webGL.gl.LINEAR);
       webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_WRAP_S, webGL.gl.CLAMP_TO_EDGE);
       webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_WRAP_T, webGL.gl.CLAMP_TO_EDGE);
       webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, null);
