@@ -163,7 +163,19 @@
           <a id="full-screen" class="fa fa-expand icon rfloat" title="Full Screen"></a>
         </div>
 
-        <script>runEleVRPlayer();</script>
+        <script>
+            runEleVRPlayer(); 
+            if (typeof window.vrHMD === "undefined") {
+                document.getElementById("left-load").style.left="0";
+                document.getElementById("left-play").style.left="0";
+                document.getElementById("left-load").style.width="100%";
+                document.getElementById("left-play").style.width="100%";
+                document.getElementById("right-load").style.right="0";
+                document.getElementById("right-play").style.right="0";
+                document.getElementById("right-load").style.width="0";
+                document.getElementById("right-play").style.width="0";
+            }
+        </script>
       </div>
 
     </body></html>
