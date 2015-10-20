@@ -48,30 +48,72 @@
     * Bug alert: the control flow here may screw up texture filtering.
     */
 
-    mediump float theta = atan(direction.x, -1.0 * direction.z);
-    mediump float phi = atan(direction.y, length(direction.xz));
-
-    /*
-    * The Nexus 7 and the Moto X (and possibly many others) have
-    * a buggy atan2 implementation that screws up when the numerator
-    * (the first argument) is too close to zero.  (The 1e-4 is carefully
-    * chosen: 1e-5 doesn't fix the problem.
-    */
-    if (abs(direction.x) < 1e-4 * abs(direction.z))
-    theta = 0.5*PI * (1.0 - sign(-1.0 * direction.z));
-    if (abs(direction.y) < 1e-4 * length(direction.xz))
-    phi = 0.0;
-
-    // Uncomment to debug the transformations.
-    // return vec4(theta / (2. * PI) + 0.5, phi / (2. * PI) + 0.5, 0., 0.);
-
-    if (projection == 0.) {
-      // Projection == 0: equirectangular projection
-      return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), phi / PI + 0.5));
+    if (projection == 2.) {
+        // Projection == 2: cube
+        mediump float scale = 0.99;
+        mediump float absx = abs(direction.x);
+        mediump float absy = abs(direction.y);
+        mediump float absz = abs(direction.z);
+        if ((absx >= absy) && (absx >= absz)) {
+            // x is biggest
+            if (direction.x >= 0.) {
+                // if +x is right then this is right, which seems to be (0,1)
+                // but with manualRotation defaulting to [0,1,0,0] this is left
+                return texture2D(uSampler, vec2((scale*direction.z / (2. * direction.x) + 1.5) / 3., (scale*direction.y / (2. * direction.x) + 1.5) / 2.)); // left
+            } else {
+                // if +x is right then this is left, which seems to be (1,1)
+                // but with manualRotation defaulting to [0,1,0,0] this is right
+                return texture2D(uSampler, vec2((scale*direction.z / (2. * direction.x) + 0.5) / 3., (scale*-direction.y / (2. * direction.x) + 1.5) / 2.)); // right
+            }
+        } else
+        if (absy >= absz) {
+            // y is biggest
+            if (direction.y >= 0.) {
+                // if +y is up then this is up, which seems to be (2,1)
+                return texture2D(uSampler, vec2((scale*-direction.x / (2. * direction.y) + 2.5) / 3., (scale*-direction.z / (2. * direction.y) + 1.5) / 2.)); // up
+            } else {
+                // if +y is up then this is down, which seems to be (0,0)
+                return texture2D(uSampler, vec2((scale*direction.x / (2. * direction.y) + 0.5) / 3., (scale*-direction.z / (2. * direction.y) + 0.5) / 2.)); // down
+            }
+        } else {
+            // z is biggest
+            if (direction.z >= 0.) {
+                // if +z is backward then this is backward, which seems to be (2,0)
+                // but with manualRotation defaulting to [0,1,0,0] this is forward
+                //return vec4(0., 0., 0.25, 0.);
+                return texture2D(uSampler, vec2((scale*-direction.x / (2. * direction.z) + 1.5) / 3., (scale*direction.y / (2. * direction.z) + 0.5) / 2.)); // forward
+            } else {
+                // if +z is backward then this is forward, which seems to be (1,0)
+                // but with manualRotation defaulting to [0,1,0,0] this is backward
+                return texture2D(uSampler, vec2((scale*-direction.x / (2. * direction.z) + 2.5) / 3., (scale*-direction.y / (2. * direction.z) + 0.5) / 2.)); // backward
+            }
+        }
     } else {
-      // Projection == 1: equirectangular top/bottom 3D projection
-      eye = 1. - eye;
-      return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), ((phi / PI + 0.5) + eye)/ 2.));
+        mediump float theta = atan(direction.x, -1.0 * direction.z);
+        mediump float phi = atan(direction.y, length(direction.xz));
+
+        /*
+        * The Nexus 7 and the Moto X (and possibly many others) have
+        * a buggy atan2 implementation that screws up when the numerator
+        * (the first argument) is too close to zero.  (The 1e-4 is carefully
+        * chosen: 1e-5 doesn't fix the problem.
+        */
+        if (abs(direction.x) < 1e-4 * abs(direction.z))
+        theta = 0.5*PI * (1.0 - sign(-1.0 * direction.z));
+        if (abs(direction.y) < 1e-4 * length(direction.xz))
+        phi = 0.0;
+
+        // Uncomment to debug the transformations.
+        // return vec4(theta / (2. * PI) + 0.5, phi / (2. * PI) + 0.5, 0., 0.);
+
+        if (projection == 0.) {
+          // Projection == 0: equirectangular projection
+          return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), phi / PI + 0.5));
+        } else {
+          // Projection == 1: equirectangular top/bottom 3D projection
+          eye = 1. - eye;
+          return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), ((phi / PI + 0.5) + eye)/ 2.));
+        }
     }
   }
 
@@ -149,6 +191,7 @@
           <select id="projection-select" class="rfloat">
             <option value=0>Equirectangular</option>
             <option value=1>Equirectangular 3D</option>
+            <option value=2>Cube</option>
           </select>
 
           <select id="video-select" class="rfloat">
