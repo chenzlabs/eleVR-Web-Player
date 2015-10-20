@@ -2,7 +2,7 @@
 
 var reqAnimFrameID = 0;
 var projection = 0;
-var manualRotation = quat.create(),
+var manualRotation = [0,1,0,0], //quat.create(),
     degtorad = Math.PI / 180;  // Degree-to-Radian conversion
 
 (function(global) {
@@ -285,7 +285,7 @@ var manualRotation = quat.create(),
       if (videoFile === 'videos/Vidcon.webm' || videoFile === 'videos/Vidcon5.mp4') {
         manualRotation = [0.38175851106643677, -0.7102527618408203, -0.2401944249868393, 0.5404701232910156];
       } else {
-        manualRotation = quat.create();
+        manualRotation = [0,1,0,0]; //quat.create();
       }
 
       var oldObjURL = videoObjectURL;
