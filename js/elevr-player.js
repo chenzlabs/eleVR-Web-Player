@@ -208,6 +208,15 @@ function initFromSettings(newSettings) {
     window.manualRotation = settings.manualRotation;
   }
 
+  if (settings.nearest) {
+      webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, texture);
+      webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_MAG_FILTER, webGL.gl.NEAREST); //LINEAR);
+      webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_MIN_FILTER, webGL.gl.NEAREST); //LINEAR);
+      //webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_WRAP_S, webGL.gl.CLAMP_TO_EDGE);
+      //webGL.gl.texParameteri(webGL.gl.TEXTURE_2D, webGL.gl.TEXTURE_WRAP_T, webGL.gl.CLAMP_TO_EDGE);
+      webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, null);
+  }
+
   if (settings.autoplay) {
     controls.play();
   } else if (settings.autoplay === false) {
