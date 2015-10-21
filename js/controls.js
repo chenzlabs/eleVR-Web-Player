@@ -137,6 +137,9 @@ var manualRotation = [0,1,0,0], //quat.create(),
         case ' ': //spacebar
           controls.playPause();
           break;
+        case '\r': //enter
+          controls.playPause();
+          break;
         case 'g':
           controls.fullscreenIgnoreHMD();
           break;
