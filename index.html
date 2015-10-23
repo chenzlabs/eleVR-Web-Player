@@ -108,7 +108,7 @@
 
         if (projection == 4.) {
           // Projection == 4: 180 equirectangular 3D, distortion
-          mediump float u = mod(theta / PI, 1.0) * 2. - 1.; // -1 to 1
+          mediump float u = max(0.,min(theta / PI, 1.0)) * 2. - 1.; // -1 to 1
           mediump float v = phi / PI * 2.; // -1 to 1
           mediump float r = sqrt(u*u + v*v);
           mediump float k = 0.1;
@@ -132,7 +132,7 @@
         } else 
         if (projection == 3.) {
           // Projection == 3: 180 3D side-by-side
-          return texture2D(uSampler, vec2((mod(theta / PI, 1.0) + eye) / 2., phi / PI + 0.5));
+          return texture2D(uSampler, vec2((max(0.,min(theta / PI, 1.0)) + eye) / 2., phi / PI + 0.5));
         } else {
           // Projection == 1: equirectangular top/bottom 3D projection
           eye = 1. - eye;
