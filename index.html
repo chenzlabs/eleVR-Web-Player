@@ -109,6 +109,15 @@
         if (projection == 0.) {
           // Projection == 0: equirectangular projection
           return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), phi / PI + 0.5));
+        } else 
+        if (projection == 3.) {
+          // Projection == 3: 180 3D side-by-side
+          return texture2D(uSampler, vec2((mod(theta / PI, 1.0) + eye) / 2., phi / PI + 0.5));
+        } else 
+        if (projection == 4.) {
+          // Projection == 3: 165 3D side-by-side, a hack/tweak
+          // TODO: correct distortion
+          return texture2D(uSampler, vec2((mod(theta / (0.9166667 * PI), 1.0) + eye) / 2., phi / PI + 0.5));
         } else {
           // Projection == 1: equirectangular top/bottom 3D projection
           eye = 1. - eye;
@@ -146,6 +155,7 @@
 <script src="js/webvr.js" type="text/javascript"></script>
 <script src="js/phonevr.js" type="text/javascript"></script>
 <script src="js/elevr-player.js" type="text/javascript"></script>
+<script src="http://dailymotion.github.io/hls.js/dist/hls.js" type="text/javascript"></script>
 </head>
 
 <body>

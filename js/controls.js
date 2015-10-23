@@ -294,7 +294,21 @@ var manualRotation = [0,1,0,0], //quat.create(),
       var oldObjURL = videoObjectURL;
       videoObjectURL = null;
 
-      video.src = videoFile;
+      if (Hls.isSupported() && videoFile.indexOf(".m3u8", videoFile.length - 5) !== -1) {
+        // try hls.js
+        var hls = new Hls();
+        // bind them together
+        hls.attachVideo(video);
+        hls.on(Hls.Events.MSE_ATTACHED,function() {
+            console.log("video and hls.js are now bound together !");
+            hls.loadSource(videoFile);
+            hls.on(Hls.Events.MANIFEST_PARSED, function(event,data) {
+             console.log("manifest loaded, found " + data.levels.length + " quality level");
+            });
+        });
+      } else {
+        video.src = videoFile;
+      }
 
       if (videoObjectURL && videoObjectURL !== videoFile) {
         URL.removeObjectURL(oldObjURL);
