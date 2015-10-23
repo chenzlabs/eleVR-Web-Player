@@ -205,7 +205,11 @@ function initFromSettings(newSettings) {
   }
 
   if (settings.manualRotation) {
-    window.manualRotation = settings.manualRotation;
+    if (typeof settings.manualRotation === 'string') {
+      window.manualRotation = JSON.parse(settings.manualRotation);
+    } else {
+      window.manualRotation = settings.manualRotation;
+    }
   }
 
   if (settings.nearest) {
