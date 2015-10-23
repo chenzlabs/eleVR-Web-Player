@@ -106,6 +106,26 @@
         // Uncomment to debug the transformations.
         // return vec4(theta / (2. * PI) + 0.5, phi / (2. * PI) + 0.5, 0., 0.);
 
+        if (projection == 4.) {
+          // Projection == 4: 180 equirectangular 3D, distortion
+          mediump float u = mod(theta / PI, 1.0) * 2. - 1.; // -1 to 1
+          mediump float v = phi / PI * 2.; // -1 to 1
+          mediump float r = sqrt(u*u + v*v);
+          mediump float k = 0.1;
+          mediump float d = (1. + r * k);
+          return texture2D(uSampler, vec2((d*u+1.)/2./2.,(d*v/2.)+0.5));
+        } else 
+        if (projection == 5.) {
+          // Projection == 5: equirectangular projection, pincushion distortion
+          mediump float u = mod(theta / (2.0*PI), 1.0) * 2. - 1.; // -1 to 1
+          mediump float v = phi / PI * 2.; // -1 to 1
+          mediump float d = sqrt(u*u + v*v) / sqrt(2.) * 2.5;
+          mediump float r = 1.;
+          if (d != 0.) {
+            r = atan(d) / d;
+          }
+          return texture2D(uSampler, vec2((r*u+1.)/2.,(r*v/2.)+0.5));
+        } else 
         if (projection == 0.) {
           // Projection == 0: equirectangular projection
           return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), phi / PI + 0.5));
@@ -113,11 +133,6 @@
         if (projection == 3.) {
           // Projection == 3: 180 3D side-by-side
           return texture2D(uSampler, vec2((mod(theta / PI, 1.0) + eye) / 2., phi / PI + 0.5));
-        } else 
-        if (projection == 4.) {
-          // Projection == 3: 165 3D side-by-side, a hack/tweak
-          // TODO: correct distortion
-          return texture2D(uSampler, vec2((mod(theta / (0.9166667 * PI), 1.0) + eye) / 2., phi / PI + 0.5));
         } else {
           // Projection == 1: equirectangular top/bottom 3D projection
           eye = 1. - eye;
