@@ -38,6 +38,11 @@
 
   #define PI 3.1415926535897932384626433832795
 
+  mediump float sinc(mediump float x) {
+    if (x == 0.) return 1.;
+    return sin(x) / x;
+  }
+
   mediump vec4 directionToColor(mediump vec3 direction, mediump float eye, mediump float projection) {
     /*
     * Input: a direction.  +x = right, +y = up, +z = backward.
@@ -108,10 +113,18 @@
 
         if (projection == 4.) {
           // try Kavrayskiy VII projection
-          mediump float u = 3.*theta/2.*sqrt(1./3.-(phi*phi/(PI*PI)));
-          mediump float v = phi; 
-          mediump float r = sqrt(u*u + v*v);
+          //mediump float u = 3.*theta/2.*sqrt(1./3.-(phi*phi/(PI*PI)));
+          //mediump float v = phi; 
+          //mediump float k = -0.15;
+          // try Wagner VI projection
+          //mediump float u = theta*sqrt(1.-(3.*phi*phi/(PI*PI)));
+          //mediump float v = phi; 
+          //mediump float k = -0.2;
+          // try Winkel tripel projection
+          mediump float u = min(1.,0.5*(theta*2./PI+2.*cos(phi)*sin(theta/2.)/sinc(acos(cos(phi)*cos(theta/2.)))));
+          mediump float v = 0.5*(phi + sin(phi)/sinc(acos(cos(phi)*cos(theta/2.))));
           mediump float k = -0.1;
+          mediump float r = sqrt(u*u + v*v);
           mediump float d = (1. + r * k);
           return texture2D(uSampler, vec2((d*u+1.)/2./2.,(d*v/2.)+0.5));
         } else 
