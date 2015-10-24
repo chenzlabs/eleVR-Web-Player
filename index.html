@@ -108,10 +108,11 @@
 
         if (projection == 4.) {
           // Projection == 4: 180 equirectangular 3D, distortion
-          mediump float u = max(0.,min(theta / PI, 1.0)) * 2. - 1.; // -1 to 1
-          mediump float v = phi / PI * 2.; // -1 to 1
+          // source material is 3168 x 1080 -- so 1584 x 1080, or 1:0.681818...
+          mediump float u = (max(0.,min(theta / PI, 1.0)) * 2. - 1.)*0.68; // -1 to 1
+          mediump float v = phi / PI * 2.; 
           mediump float r = sqrt(u*u + v*v);
-          mediump float k = 0.1;
+          mediump float k = 1.;
           mediump float d = (1. + r * k);
           return texture2D(uSampler, vec2((d*u+1.)/2./2.,(d*v/2.)+0.5));
         } else 
