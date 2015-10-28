@@ -121,10 +121,12 @@
           //mediump float v = phi; 
           //mediump float k = -0.2;
           // try Winkel tripel projection
-          mediump float u = min(1.,0.5*(theta*2./PI+2.*cos(phi)*sin(theta/2.)/sinc(acos(cos(phi)*cos(theta/2.)))));
+          mediump float u = min(1.18,0.5*(theta*2./PI+2.*cos(phi)*sin(theta/2.)/sinc(acos(cos(phi)*cos(theta/2.)))));
           mediump float v = 0.5*(phi + sin(phi)/sinc(acos(cos(phi)*cos(theta/2.))));
-          mediump float k = -0.1;
           mediump float r = sqrt(u*u + v*v);
+          //mediump float k = 0.31;
+          //mediump float d = (0.5 + r * k); //(1. + r * k);
+          mediump float k = -0.1;
           mediump float d = (1. + r * k);
           return texture2D(uSampler, vec2((d*u+1.)/2./2.,(d*v/2.)+0.5));
         } else 
@@ -132,11 +134,18 @@
           // Projection == 5: equirectangular projection, pincushion distortion
           mediump float u = mod(theta / (2.0*PI), 1.0) * 2. - 1.; // -1 to 1
           mediump float v = phi / PI * 2.; // -1 to 1
-          mediump float d = sqrt(u*u + v*v) / sqrt(2.) * 2.5;
+          mediump float d = sqrt(u*u + v*v) / sqrt(2.) * 2.;
           mediump float r = 1.;
           if (d != 0.) {
             r = atan(d) / d;
           }
+          return texture2D(uSampler, vec2((r*u+1.)/2.,(r*v/2.)+0.5));
+        } else 
+        if (projection == 6.) {
+          // Projection == 6: equirectangular projection, barrel distortion
+          mediump float u = mod(theta / (2.0*PI), 1.0) * 2. - 1.; // -1 to 1
+          mediump float v = phi / PI * 2.; // -1 to 1
+          mediump float r = 1. + (u*u + v*v) * 2.; // k
           return texture2D(uSampler, vec2((r*u+1.)/2.,(r*v/2.)+0.5));
         } else 
         if (projection == 0.) {
