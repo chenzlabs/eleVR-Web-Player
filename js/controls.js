@@ -328,7 +328,7 @@ var ccws = null;
             } else
             if ("0123456789".indexOf(e.data[0]) != -1) {
               var ejs = JSON.parse(e.data);
-              video.currentTime = ejs;
+              video.currentTime = ejs / 1000.0;
             } else
             if ("pause" == e.data) {
               controls.pause();
@@ -336,9 +336,14 @@ var ccws = null;
             if ("play" == e.data) {
               controls.play();
             } else
+            if (e.data.startsWith("play ")) {
+              var ejs = JSON.parse(e.data.substring(5));
+              controls.play();
+              video.currentTime = ejs / 1000.0;
+            } else
             if (e.data.startsWith("src ")) {
               controls.loadVideo(e.data.substring(4));
-              controls.play();
+              // don't play, wait for instruction... controls.play();
             } else
             if (e.data.startsWith("projection ")) {
               var ejs = JSON.parse(e.data.substring(11));
