@@ -338,6 +338,7 @@ var ccws = null;
             } else
             if (e.data.startsWith("src ")) {
               controls.loadVideo(e.data.substring(4));
+              controls.play();
             } else
             if (e.data.startsWith("projection ")) {
               var ejs = JSON.parse(e.data.substring(11));
