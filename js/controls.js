@@ -327,6 +327,25 @@ var ccws = null;
             if (e.data.startsWith('[') && e.data.endsWith(']')) {
               var ejs = JSON.parse(e.data);
               manualRotation = ejs;
+            } else
+            if ("0123456789".indexOf(e.data[0]) != -1) {
+              var ejs = JSON.parse(e.data);
+              video.currentTime = ejs;
+            } else
+            if ("pause" == e.data) {
+              video.pause();
+            } else
+            if ("play" == e.data) {
+              video.play();
+            } else
+            if (e.data.startsWith("src ")) {
+              video.pause();
+              video.src = e.data.substring(4);
+              video.play();
+            } else
+            if (e.data.startsWith("projection ")) {
+              var ejs = JSON.parse(e.data.substring(11));
+              projection = ejs;
             }
           } catch (e) {
             console.log(e.message);
