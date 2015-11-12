@@ -175,9 +175,17 @@ var vrHMD, vrSensor;
         } else {
           totalRotation = manualRotation;
         }
+        var finalRotation = totalRotation; 
+        quat.multiply(totalRotation, finalRotation, [0,1,0,0]); 
+        finalRotation = totalRotation;
+        totalRotation = [finalRotation[0], -finalRotation[1], -finalRotation[2],finalRotation[3]];
         mat4.fromQuat(rotation, totalRotation);
       } else {
         quat.multiply(totalRotation, manualRotation, webGL.getPhoneVR().rotationQuat());
+        var finalRotation = totalRotation; 
+        quat.multiply(totalRotation, finalRotation, [0,1,0,0]); 
+        finalRotation = totalRotation;
+        totalRotation = [finalRotation[0], -finalRotation[1], -finalRotation[2],finalRotation[3]];
         mat4.fromQuat(rotation, totalRotation);
       }
 
