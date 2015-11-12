@@ -4,6 +4,7 @@ var reqAnimFrameID = 0;
 var projection = 0;
 var manualRotation = [0,1,0,0], //quat.create(),
     degtorad = Math.PI / 180;  // Degree-to-Radian conversion
+var ccws = null;
 
 (function(global) {
   'use strict';
@@ -312,6 +313,27 @@ var manualRotation = [0,1,0,0], //quat.create(),
 
       if (videoObjectURL && videoObjectURL !== videoFile) {
         URL.removeObjectURL(oldObjURL);
+      }
+
+      if (ccws != null) {
+        ccws.close();
+      }
+
+      try {
+        ccws = new WebSocket("wss://wsbcast.herokuapp.com/" + videoFile);
+        ccws.onmessage = function(e) {
+          console.log(e.data);
+          try {
+            if (e.data.startsWith('[') && e.data.endsWith(']')) {
+              var ejs = JSON.parse(e.data);
+              manualRotation = ejs;
+            }
+          } catch (e) {
+            console.log(e.message);
+          }
+        };
+      } catch (e) {
+        console.log(e.message);
       }
     },
 
