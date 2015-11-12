@@ -295,7 +295,7 @@ var ccws = null;
       var oldObjURL = videoObjectURL;
       videoObjectURL = null;
 
-      if (Hls.isSupported() && videoFile.indexOf(".m3u8", videoFile.length - 5) !== -1) {
+      if (Hls.isSupported() && videoFile.indexOf("m3u8") !== -1) {
         // try hls.js
         var hls = new Hls();
         // bind them together
@@ -315,12 +315,10 @@ var ccws = null;
         URL.removeObjectURL(oldObjURL);
       }
 
-      if (ccws != null) {
-        ccws.close();
-      }
-
       try {
-        ccws = new WebSocket("wss://wsbcast.herokuapp.com/" + videoFile);
+        if (ccws == null) {
+          ccws = new WebSocket("wss://wsbcast.herokuapp.com/" + videoFile);
+        }
         ccws.onmessage = function(e) {
           console.log(e.data);
           try {
