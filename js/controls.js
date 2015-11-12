@@ -333,15 +333,15 @@ var ccws = null;
               video.currentTime = ejs;
             } else
             if ("pause" == e.data) {
-              video.pause();
+              controls.pause();
             } else
             if ("play" == e.data) {
-              video.play();
+              controls.play();
             } else
             if (e.data.startsWith("src ")) {
-              video.pause();
+              controls.pause();
               video.src = e.data.substring(4);
-              video.play();
+              controls.play();
             } else
             if (e.data.startsWith("projection ")) {
               var ejs = JSON.parse(e.data.substring(11));
