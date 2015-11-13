@@ -256,7 +256,7 @@ var vrHMD, vrSensor;
 */
         var ratio = canvas.width/canvas.height;
         //mat4.perspective(perspectiveMatrix, Math.PI/2, ratio, 0.1, 10);
-        mat4.perspective(perspectiveMatrix, Math.PI/3, ratio, 0.1, 10);
+        mat4.perspective(perspectiveMatrix, Math.PI*12/45, ratio, 0.1, 10);
         webGL.drawOneEye(2, perspectiveMatrix);
       }
 
