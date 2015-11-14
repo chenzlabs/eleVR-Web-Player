@@ -148,6 +148,18 @@
           mediump float r = 1. + (u*u + v*v) * 2.; // k
           return texture2D(uSampler, vec2((r*u+1.)/2.,(r*v/2.)+0.5));
         } else 
+        if (projection == 7.) {
+          // Projection == 7: cylindrical, top-bottom
+          mediump float u = mod(theta / (2.0*PI), 1.0) * 2. - 1.; // -1 to 1
+          mediump float v = phi / PI * 3.; // -1.5 to -1.5
+          if ((v < -0.5) || (v >= 0.5))
+            return vec4(0.,0.,0.,0.);
+          else
+          if (u < 0.)
+            return texture2D(uSampler, vec2(u+1., (v/2.)+0.75));
+          else
+            return texture2D(uSampler, vec2(u,(v/2.)+0.25));
+        } else 
         if (projection == 0.) {
           // Projection == 0: equirectangular projection
           return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), phi / PI + 0.5));
