@@ -299,7 +299,7 @@ var ccws = null;
         // try hls.js
         var hls = new Hls();
         // bind them together
-        hls.attachVideo(video);
+        hls.attachMedia(video);
         hls.on(Hls.Events.MSE_ATTACHED,function() {
             console.log("video and hls.js are now bound together !");
             hls.loadSource(videoFile);
