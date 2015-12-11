@@ -160,6 +160,33 @@
           else
             return texture2D(uSampler, vec2(u,(v/2.)+0.25));
         } else 
+        if (projection == 8.) {
+            // Projection == 8: Theta S dual fisheye
+
+            // FIXME: experimentally determined; manufacturer info may help?
+            mediump float FOV = PI * 195. / 180.; // FOV of the fisheye
+            
+            mediump float width = 1.0;
+            mediump float r = width * phi / FOV;
+
+            mediump float v = 0.99999999 - 0.5 * width + r * cos(theta);
+            mediump float u = (0.5 * width + r * sin(theta)) * 0.5;
+            if (phi < 0.) {
+                u = 0.99999999 - u;
+                
+                // FIXME: experimentally determined; manufacturer info may help?
+                u = u * 0.93333333 + 0.050;
+                v = v * 0.85 + 0.131;
+            } else {
+                u = 0.5 - u;
+                
+                // FIXME: experimentally determined; manufacturer info may help?
+                u = u * 0.93333333 + 0.0167;
+                v = v * 0.85 + 0.131;
+            }
+    
+            return texture2D(uSampler, vec2(u, v));
+        } else
         if (projection == 0.) {
           // Projection == 0: equirectangular projection
           return texture2D(uSampler, vec2(mod(theta / (2.0*PI), 1.0), phi / PI + 0.5));
