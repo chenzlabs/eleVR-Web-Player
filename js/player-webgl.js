@@ -231,12 +231,31 @@ var vrHMD, vrSensor;
       if (timing.prevFrameTime) {
         // Apply manual controls.
         var interval = (timing.frameTime - timing.prevFrameTime) * 0.001;
-
+/*
+        // the problem with this technique is that when tilted up/down, 
+        // rotating left/right and then coming back down leaves the viewer with non-zero roll...
         var update = quat.fromValues(controls.manualRotateRate[0] * interval,
                                      controls.manualRotateRate[1] * interval,
                                      controls.manualRotateRate[2] * interval, 1.0);
         quat.normalize(update, update);
         quat.multiply(manualRotation, manualRotation, update);
+*/
+        // treat manualRotateRate[0] as latitiude delta, and manualRotateRate[1] as longitude
+        // so we want to accumulate latlong as latlong, and use that to set manualRotation from originRotation
+        controls.latlong[0] += controls.manualRotateRate[0] * interval * 90;
+        controls.latlong[1] += controls.manualRotateRate[1] * interval * 90;
+
+        // so first let's do pitch
+        var ratio = Math.PI / 180 / 2;
+        var yaw = quat.fromValues(Math.cos(ratio * controls.latlong[1]), 0, -Math.sin(ratio * controls.latlong[1]), 0);
+        var pitch = quat.fromValues(Math.cos(ratio * controls.latlong[0]), 0, 0, -Math.sin(ratio * controls.latlong[0]));
+        var update = quat.create();
+ 
+        // this works but then the originRotation is not applied
+        quat.multiply(manualRotation, yaw, pitch);
+ 
+        // FIXME: trying to do quat.multiply with originRotation (to apply original offset)
+        // literally makes the world spin; need to get latlong from originRotation
       }
 
       var perspectiveMatrix = mat4.create();

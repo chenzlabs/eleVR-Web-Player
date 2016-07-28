@@ -211,6 +211,11 @@ function initFromSettings(newSettings) {
       window.manualRotation = settings.manualRotation;
     }
   }
+  window.originRotation = window.manualRotation;
+
+  controls.latlong[0] = Math.asin(2 * (window.originRotation[0] * window.originRotation[2] - window.originRotation[1] * window.originRotation[3])) * 180 / Math.PI;
+
+  controls.latlong[1] = Math.atan2(2 * (window.originRotation[0] * window.originRotation[1] + window.originRotation[2] * window.originRotation[3]), 1 - 2 * (window.originRotation[1] * window.originRotation[1] + window.originRotation[2] * window.originRotation[2])) * 180 / Math.PI;
 
   if (settings.nearest) {
       webGL.gl.bindTexture(webGL.gl.TEXTURE_2D, texture);

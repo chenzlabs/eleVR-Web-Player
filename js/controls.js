@@ -25,6 +25,7 @@ var ccws = null;
       'e' : {index: 2, sign: 1, active: 0},
     },
 
+    latlong: new Float32Array([0, 0, 0]),           // Vector, camera-relative
     manualRotateRate: new Float32Array([0, 0, 0]),  // Vector, camera-relative
 
     create: function() {
